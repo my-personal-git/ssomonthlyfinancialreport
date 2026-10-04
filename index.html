@@ -1,11 +1,10 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Monthly Financial Report</title>
+<title>SSO Monthly Financial Report</title>
 
 <style>
 
@@ -773,7 +772,7 @@ Report Name
 <input
 type="text"
 id="reportName"
-value="Monthly Financial Report"
+value="Sonesta Silver Oak Monthly Report"
 oninput="updateReportName()"
 >
 
@@ -804,7 +803,7 @@ Opening Balance
 <input
 type="number"
 id="openingBalance"
-value="100000"
+value="0"
 oninput="calculateReport()"
 >
 
@@ -874,7 +873,76 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="50000"
+value="0"
+oninput="calculateReport()"
+>
+</td>
+
+<td class="percentage">
+0%
+</td>
+
+<td class="remove-column">
+
+<button
+class="remove-btn"
+onclick="removeRow(this)">
+×
+</button>
+
+</td>
+
+</tr>
+<tr>
+
+<td>
+<input
+type="text"
+value="AdOnMo"
+oninput="calculateReport()"
+>
+</td>
+
+<td>
+<input
+class="amount-input"
+type="number"
+value="0"
+oninput="calculateReport()"
+>
+</td>
+
+<td class="percentage">
+0%
+</td>
+
+<td class="remove-column">
+
+<button
+class="remove-btn"
+onclick="removeRow(this)">
+×
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+<input
+type="text"
+value="Airtel Tower"
+oninput="calculateReport()"
+>
+</td>
+
+<td>
+<input
+class="amount-input"
+type="number"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -901,7 +969,7 @@ onclick="removeRow(this)">
 <td>
 <input
 type="text"
-value="Received"
+value="Water Bill"
 oninput="calculateReport()"
 >
 </td>
@@ -910,43 +978,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="15000"
-oninput="calculateReport()"
->
-</td>
-
-<td class="percentage">
-0%
-</td>
-
-<td class="remove-column">
-
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
-
-</td>
-
-</tr>
-
-
-<tr>
-
-<td>
-<input
-type="text"
-value="Water Charges Received"
-oninput="calculateReport()"
->
-</td>
-
-<td>
-<input
-class="amount-input"
-type="number"
-value="10000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -982,7 +1014,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="5000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1074,7 +1106,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="24000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1110,7 +1142,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="15000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1146,7 +1178,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="5000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1182,7 +1214,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="3000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1218,7 +1250,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="8000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1254,7 +1286,7 @@ oninput="calculateReport()"
 <input
 class="amount-input"
 type="number"
-value="2000"
+value="0"
 oninput="calculateReport()"
 >
 </td>
@@ -1396,7 +1428,7 @@ id="expenseLegend">
 <div class="closing">
 
 <small>
-Closing Balance — Last Date of Month
+Closing Balance on Last Date of Month
 </small>
 
 <strong id="closingBalance">
@@ -1447,7 +1479,7 @@ Export
 
 
 <div class="footer">
-Monthly Financial Report
+@SSO , All Right Reserve
 </div>
 
 
