@@ -4,3269 +4,3653 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SSO Monthly Financial Report</title>
+<title>Sonesta Silver Oak</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     margin: 0;
-    padding: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f9;
+    background: #f3f6fa;
     color: #1f2937;
 }
 
-button,
-input,
-select {
-    font-family: inherit;
-}
-
 .container {
-    width: 100%;
-    max-width: 1280px;
+    max-width: 1200px;
     margin: auto;
     padding: 20px;
 }
 
-.report {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-}
-
-
-/* =========================================================
+/* =====================================================
    HEADER
-========================================================= */
+===================================================== */
 
 .header {
+    background: linear-gradient(
+        135deg,
+        #1d4ed8,
+        #2563eb,
+        #3b82f6
+    );
+
+    color: white;
+
+    padding: 30px 20px;
+
     text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e5e7eb;
+
+    border-radius: 18px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.20);
 }
 
 .header h1 {
     margin: 0;
+
     font-size: 32px;
-    line-height: 1.2;
-    color: #111827;
-    word-break: break-word;
+
+    font-weight: 800;
 }
 
-.header p {
-    margin: 10px 0 0;
-    color: #6b7280;
-    font-size: 15px;
+.header .report-name-display {
+    margin-top: 8px;
+
+    font-size: 22px;
+
+    font-weight: 600;
 }
 
+.header .month-display {
+    margin-top: 6px;
 
-/* =========================================================
+    font-size: 16px;
+
+    opacity: 0.90;
+}
+
+/* =====================================================
    CONTROLS
-========================================================= */
+===================================================== */
 
 .controls {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin-bottom: 30px;
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.06);
 }
 
-.field {
+.controls-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.form-group {
     display: flex;
+
     flex-direction: column;
 }
 
-.field label {
-    font-size: 14px;
+.form-group label {
     font-weight: 700;
+
     margin-bottom: 7px;
+
     color: #374151;
 }
 
-input,
-select {
+.form-group input,
+.form-group select {
+
     width: 100%;
-    min-height: 44px;
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 9px;
-    background: white;
-    color: #111827;
-    font-size: 15px;
-}
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37,99,235,.10);
-}
+    padding: 12px 14px;
 
+    border:
+        1px solid #d1d5db;
 
-/* =========================================================
-   SECTIONS
-========================================================= */
-
-.section {
-    margin-top: 28px;
-}
-
-.section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 12px;
-}
-
-.section-title h2 {
-    margin: 0;
-    font-size: 21px;
-}
-
-.incoming-title {
-    color: #15803d;
-}
-
-.expense-title {
-    color: #dc2626;
-}
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border: 1px solid #e5e7eb;
     border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
 }
 
-table {
-    width: 100%;
-    min-width: 650px;
-    border-collapse: collapse;
+.form-group input:focus,
+.form-group select:focus {
+
+    border-color:
+        #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.12);
 }
 
-th {
-    background: #f3f4f6;
-    padding: 13px 12px;
-    text-align: left;
-    font-size: 14px;
-    color: #374151;
-    white-space: nowrap;
-}
+/* =====================================================
+   SUMMARY CARDS
+===================================================== */
 
-td {
-    padding: 9px 10px;
-    border-bottom: 1px solid #e5e7eb;
-    vertical-align: middle;
-}
+.summary-grid {
 
-tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.amount-input {
-    text-align: right;
-}
-
-.percentage {
-    text-align: right;
-    font-weight: 700;
-    color: #374151;
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.btn {
-    border: none;
-    min-height: 44px;
-    padding: 10px 16px;
-    border-radius: 9px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-    transition: .2s ease;
-    white-space: nowrap;
-}
-
-.btn:active {
-    transform: scale(.98);
-}
-
-.btn-green {
-    background: #16a34a;
-    color: white;
-}
-
-.btn-green:hover {
-    background: #15803d;
-}
-
-.btn-red {
-    background: #dc2626;
-    color: white;
-}
-
-.btn-red:hover {
-    background: #b91c1c;
-}
-
-.btn-blue {
-    background: #2563eb;
-    color: white;
-}
-
-.btn-blue:hover {
-    background: #1d4ed8;
-}
-
-.remove-btn {
-    border: none;
-    background: #fee2e2;
-    color: #b91c1c;
-    min-width: 38px;
-    min-height: 38px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   SUMMARY
-========================================================= */
-
-.summary {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 18px;
-    margin-top: 30px;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 22px;
 }
 
 .summary-card {
+
+    min-height: 125px;
+
     padding: 20px;
-    border-radius: 13px;
+
     color: white;
-    min-height: 105px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+
+    border-radius: 16px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,0.12);
 }
 
-.summary-card small {
-    opacity: .9;
-    margin-bottom: 8px;
-    font-size: 13px;
+.summary-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+
+    height: 100px;
+
+    right: -35px;
+
+    top: -35px;
+
+    background:
+        rgba(255,255,255,0.12);
+
+    border-radius: 50%;
 }
 
-.summary-card strong {
+.summary-card.opening {
+
+    background:
+        linear-gradient(
+            135deg,
+            #1d4ed8,
+            #3b82f6
+        );
+}
+
+.summary-card.incoming {
+
+    background:
+        linear-gradient(
+            135deg,
+            #047857,
+            #10b981
+        );
+}
+
+.summary-card.expenses {
+
+    background:
+        linear-gradient(
+            135deg,
+            #b91c1c,
+            #ef4444
+        );
+}
+
+.summary-card.closing {
+
+    background:
+        linear-gradient(
+            135deg,
+            #4338ca,
+            #7c3aed
+        );
+}
+
+.summary-title {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    opacity: 0.95;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+.summary-value {
+
     font-size: 25px;
-    line-height: 1.2;
-    word-break: break-word;
+
+    font-weight: 800;
+
+    margin-top: 16px;
+
+    position: relative;
+
+    z-index: 2;
 }
 
-.opening-card {
-    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.section {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 16px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.06);
 }
 
-.incoming-card {
-    background: linear-gradient(135deg,#16a34a,#15803d);
+.section-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
 }
 
-.expense-card {
-    background: linear-gradient(135deg,#dc2626,#b91c1c);
+.section-header h2 {
+
+    margin: 0;
+
+    font-size: 21px;
+
+    color: #111827;
 }
 
+/* =====================================================
+   TABLE
+===================================================== */
 
-/* =========================================================
+.table-wrapper {
+
+    overflow-x: auto;
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 650px;
+}
+
+th {
+
+    background:
+        #f3f4f6;
+
+    color:
+        #374151;
+
+    padding: 12px;
+
+    text-align: left;
+
+    font-size: 14px;
+}
+
+td {
+
+    padding: 10px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+}
+
+td input {
+
+    width: 100%;
+
+    padding: 9px 10px;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.percent {
+
+    font-weight: 700;
+
+    color:
+        #2563eb;
+}
+
+.remove-btn {
+
+    background:
+        #fee2e2;
+
+    color:
+        #b91c1c;
+
+    border: none;
+
+    padding:
+        8px 12px;
+
+    border-radius:
+        8px;
+
+    cursor: pointer;
+
+    font-weight:
+        600;
+}
+
+.remove-btn:hover {
+
+    background:
+        #fecaca;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.add-btn {
+
+    background:
+        #2563eb;
+
+    color:
+        white;
+
+    border:
+        none;
+
+    padding:
+        9px 15px;
+
+    border-radius:
+        9px;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        700;
+}
+
+.add-btn:hover {
+
+    background:
+        #1d4ed8;
+}
+
+/* =====================================================
    CHARTS
-========================================================= */
+===================================================== */
 
-.charts {
+.chart-grid {
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 22px;
-    margin-top: 30px;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 20px;
 }
 
 .chart-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 15px;
-    padding: 20px;
-    background: white;
-    min-width: 0;
+
+    background:
+        white;
+
+    padding:
+        20px;
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.06);
 }
 
-.chart-card h3 {
-    margin: 0 0 15px;
-    text-align: center;
-    font-size: 18px;
+.chart-title {
+
+    font-size:
+        20px;
+
+    font-weight:
+        800;
+
+    text-align:
+        center;
+
+    margin-bottom:
+        15px;
 }
 
-.chart-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 280px;
+.chart-container {
+
+    height:
+        330px;
+
+    position:
+        relative;
 }
-
-.chart-wrapper canvas {
-    width: 280px;
-    height: 280px;
-    max-width: 100%;
-}
-
-
-/* =========================================================
-   LEGEND
-========================================================= */
 
 .legend {
-    margin-top: 15px;
+
+    margin-top:
+        20px;
 }
 
 .legend-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid #f3f4f6;
-    font-size: 13px;
-}
 
-.legend-item:last-child {
-    border-bottom: none;
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    padding:
+        9px 0;
+
+    border-bottom:
+        1px solid #f1f1f1;
+
+    font-size:
+        14px;
 }
 
 .legend-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-}
 
-.legend-left span:last-child {
-    overflow-wrap: anywhere;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
 }
 
 .legend-color {
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    border-radius: 3px;
+
+    width:
+        12px;
+
+    height:
+        12px;
+
+    border-radius:
+        3px;
+
+    display:
+        inline-block;
 }
 
-.legend-item strong {
-    white-space: nowrap;
-    font-size: 12px;
-}
-
-
-/* =========================================================
-   CLOSING
-========================================================= */
-
-.closing {
-    margin-top: 30px;
-    background: linear-gradient(135deg,#111827,#1f2937);
-    color: white;
-    border-radius: 15px;
-    padding: 25px;
-    text-align: center;
-}
-
-.closing small {
-    display: block;
-    opacity: .8;
-    margin-bottom: 9px;
-    font-size: 13px;
-}
-
-.closing strong {
-    font-size: 36px;
-    line-height: 1.2;
-    word-break: break-word;
-}
-
-
-/* =========================================================
+/* =====================================================
    EXPORT
-========================================================= */
+===================================================== */
 
 .export-section {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    margin-top: 25px;
+
+    background:
+        white;
+
+    padding:
+        20px;
+
+    border-radius:
+        16px;
+
+    margin-top:
+        20px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.06);
 }
 
-.export-section select {
-    width: 180px;
+.export-controls {
+
+    display:
+        flex;
+
+    gap:
+        12px;
+
+    align-items:
+        end;
 }
+
+.export-controls .form-group {
+
+    flex:
+        1;
+}
+
+.export-btn {
+
+    background:
+        #111827;
+
+    color:
+        white;
+
+    border:
+        none;
+
+    padding:
+        12px 20px;
+
+    border-radius:
+        10px;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        700;
+
+    font-size:
+        15px;
+}
+
+.export-btn:hover {
+
+    background:
+        #000000;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
 
 .footer {
-    text-align: center;
-    margin-top: 25px;
-    color: #9ca3af;
-    font-size: 12px;
+
+    text-align:
+        center;
+
+    color:
+        #9ca3af;
+
+    font-size:
+        13px;
+
+    margin-top:
+        25px;
 }
 
+/* =====================================================
+   TABLET
+===================================================== */
 
-/* =========================================================
-   MOBILE
-========================================================= */
+@media (max-width: 1100px) {
 
-@media (max-width:700px) {
+    .summary-grid {
 
-    body {
-        background: #f4f6f9;
+        grid-template-columns:
+            repeat(2, 1fr);
     }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .controls-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .chart-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
 
     .container {
-        padding: 8px;
-    }
 
-    .report {
-        padding: 14px;
-        border-radius: 14px;
+        padding:
+            10px;
     }
 
     .header {
-        margin-bottom: 20px;
-        padding-bottom: 16px;
+
+        padding:
+            24px 15px;
     }
 
     .header h1 {
-        font-size: 24px;
+
+        font-size:
+            26px;
     }
 
-    .header p {
-        font-size: 13px;
+    .header .report-name-display {
+
+        font-size:
+            18px;
     }
 
-    .controls {
-        grid-template-columns: 1fr;
-        gap: 14px;
-        margin-bottom: 22px;
-    }
+    .summary-grid {
 
-    input,
-    select {
-        min-height: 46px;
-        font-size: 16px;
-    }
-
-    .section {
-        margin-top: 22px;
-    }
-
-    .section-title h2 {
-        font-size: 19px;
-    }
-
-    .section-title .btn {
-        min-height: 42px;
-        padding: 9px 12px;
-        font-size: 13px;
-    }
-
-
-    /* Mobile table becomes cards */
-
-    .table-wrapper {
-        border: none;
-        overflow: visible;
-    }
-
-    table {
-        min-width: 0;
-        width: 100%;
-    }
-
-    table thead {
-        display: none;
-    }
-
-    table tbody {
-        display: block;
-    }
-
-    table tbody tr {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 12px;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 7px rgba(0,0,0,.03);
-    }
-
-    table tbody td {
-        display: block;
-        border: none;
-        padding: 0;
-    }
-
-    table tbody td:first-child {
-        grid-column: 1 / -1;
-    }
-
-    table tbody td:nth-child(2) {
-        grid-column: 1;
-    }
-
-    table tbody td:nth-child(3) {
-        grid-column: 2;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        min-height: 44px;
-    }
-
-    table tbody td:nth-child(4) {
-        grid-column: 1 / -1;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    table tbody td:nth-child(2)::before {
-        content: "Amount (₹)";
-        display: block;
-        font-size: 11px;
-        color: #6b7280;
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-
-    table tbody td:nth-child(3)::before {
-        content: "Percentage";
-        font-size: 11px;
-        color: #6b7280;
-        font-weight: 700;
-        margin-right: 7px;
-    }
-
-    .amount-input {
-        text-align: left;
-    }
-
-
-    /* Summary */
-
-    .summary {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        margin-top: 22px;
+        grid-template-columns:
+            1fr;
     }
 
     .summary-card {
-        min-height: 90px;
-        padding: 17px;
+
+        min-height:
+            110px;
     }
 
+    .summary-value {
 
-    /* Charts */
-
-    .charts {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        margin-top: 22px;
+        font-size:
+            23px;
     }
 
-    .chart-card {
-        padding: 15px;
+    .section {
+
+        padding:
+            15px;
     }
 
-    .chart-wrapper {
-        min-height: auto;
-    }
+    .section-header {
 
-    .chart-wrapper canvas {
-        width: 240px;
-        height: 240px;
-    }
+        flex-direction:
+            column;
 
+        align-items:
+            flex-start;
 
-    /* Closing */
-
-    .closing {
-        margin-top: 22px;
-        padding: 22px 15px;
-    }
-
-    .closing strong {
-        font-size: 29px;
-    }
-
-
-    /* Export */
-
-    .export-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .export-section select,
-    .export-section button {
-        width: 100%;
-    }
-}
-
-
-/* =========================================================
-   SMALL PHONES
-========================================================= */
-
-@media (max-width:380px) {
-
-    .report {
-        padding: 11px;
-    }
-
-    .header h1 {
-        font-size: 21px;
-    }
-
-    .section-title h2 {
-        font-size: 17px;
-    }
-
-    .chart-wrapper canvas {
-        width: 210px;
-        height: 210px;
-    }
-
-    .closing strong {
-        font-size: 25px;
-    }
-}
-
-
-/* =========================================================
-   PRINT PDF - A4 PORTRAIT
-========================================================= */
-
-@media print {
-
-    @page {
-        size: A4 portrait;
-        margin: 10mm;
-    }
-
-    body {
-        background: white;
-    }
-
-    .container {
-        max-width: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .report {
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
-    }
-
-    .controls,
-    .add-row,
-    .remove-column,
-    .export-section {
-        display: none !important;
-    }
-
-    .charts {
-        display: block;
-    }
-
-    .chart-card {
-        margin-bottom: 20px;
-        page-break-inside: avoid;
+        gap:
+            10px;
     }
 
     .table-wrapper {
-        overflow: visible;
+
+        overflow:
+            visible;
+    }
+
+    table,
+    thead,
+    tbody,
+    tr,
+    th,
+    td {
+
+        display:
+            block;
     }
 
     table {
-        min-width: 0;
-        width: 100%;
+
+        min-width:
+            0;
     }
 
-    .closing {
-        page-break-inside: avoid;
+    thead {
+
+        display:
+            none;
     }
+
+    tbody tr {
+
+        background:
+            #f9fafb;
+
+        border:
+            1px solid #e5e7eb;
+
+        border-radius:
+            12px;
+
+        padding:
+            12px;
+
+        margin-bottom:
+            12px;
+    }
+
+    td {
+
+        border:
+            none;
+
+        padding:
+            7px 0;
+    }
+
+    td::before {
+
+        display:
+            block;
+
+        font-size:
+            12px;
+
+        font-weight:
+            700;
+
+        color:
+            #6b7280;
+
+        margin-bottom:
+            4px;
+    }
+
+    td:nth-child(1)::before {
+
+        content:
+            "Category";
+    }
+
+    td:nth-child(2)::before {
+
+        content:
+            "Amount";
+    }
+
+    td:nth-child(3)::before {
+
+        content:
+            "Percentage";
+    }
+
+    td:nth-child(4)::before {
+
+        content:
+            "Action";
+    }
+
+    .chart-container {
+
+        height:
+            280px;
+    }
+
+    .export-controls {
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+    }
+
+    .export-btn {
+
+        width:
+            100%;
+    }
+
+}
+
+/* =====================================================
+   PRINT / PDF
+===================================================== */
+
+@page {
+
+    size:
+        A4 portrait;
+
+    margin:
+        10mm;
+}
+
+@media print {
+
+    body {
+
+        background:
+            white;
+    }
+
+    .container {
+
+        max-width:
+            none;
+
+        padding:
+            0;
+    }
+
+    /*
+       Hide editable tables,
+       controls and export controls
+    */
+
+    .controls,
+    .section,
+    .export-section,
+    .footer {
+
+        display:
+            none !important;
+    }
+
+    .header {
+
+        box-shadow:
+            none;
+
+        margin-bottom:
+            15px;
+
+        border-radius:
+            0;
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap:
+            10px;
+    }
+
+    .summary-card {
+
+        box-shadow:
+            none;
+
+        break-inside:
+            avoid;
+    }
+
+    .chart-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:
+            10px;
+    }
+
+    .chart-card {
+
+        box-shadow:
+            none;
+
+        break-inside:
+            avoid;
+    }
+
+    .chart-container {
+
+        height:
+            260px;
+    }
+
 }
 
 </style>
 </head>
 
-
 <body>
 
 <div class="container">
 
-<div class="report" id="report">
 
+    <!-- =================================================
+         FIXED HEADER
+    ================================================= -->
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+    <div class="header">
 
-<div class="header">
+        <h1>
+            Sonesta Silver Oak
+        </h1>
 
-<h1 id="pageReportName">
-Monthly Financial Report
-</h1>
+        <div
+            class="report-name-display"
+            id="reportNameDisplay">
 
-<p id="pageMonth">
-Monthly Expense & Income Statement
-</p>
+            Monthly Financial Report
 
-</div>
+        </div>
 
+        <div
+            class="month-display"
+            id="reportMonthText">
 
-<!-- =====================================================
-     REPORT INFORMATION
-===================================================== -->
+            Financial Report
 
-<div class="controls">
+        </div>
 
-<div class="field">
+    </div>
 
-<label>
-Report Name
-</label>
 
-<input
-type="text"
-id="reportName"
-value="Sonesta Silver Oak Monthly Report"
-oninput="updateReportName()"
->
+    <!-- =================================================
+         CONTROLS
+    ================================================= -->
 
-</div>
+    <div class="controls">
 
+        <div class="controls-grid">
 
-<div class="field">
 
-<label>
-Report Month
-</label>
+            <!-- REPORT NAME -->
 
-<input
-type="month"
-id="reportMonth"
-onchange="calculateReport()"
->
+            <div class="form-group">
 
-</div>
+                <label>
+                    Report Name
+                </label>
 
+                <input
+                    type="text"
+                    id="reportName"
+                    value="Monthly Financial Report"
+                    oninput="updateReportName()">
 
-<div class="field">
+            </div>
 
-<label>
-Opening Balance
-</label>
 
-<input
-type="number"
-id="openingBalance"
-value="0"
-oninput="calculateReport()"
->
+            <!-- REPORT MONTH -->
 
-</div>
+            <div class="form-group">
 
-</div>
+                <label>
+                    Report Month
+                </label>
 
+                <input
+                    type="month"
+                    id="reportMonth"
+                    onchange="calculateReport()">
 
-<!-- =====================================================
-     INCOMING
-===================================================== -->
+            </div>
 
-<div class="section">
 
-<div class="section-title">
+            <!-- OPENING BALANCE -->
 
-<h2 class="incoming-title">
-All Incoming
-</h2>
+            <div class="form-group">
 
-<button
-class="btn btn-green add-row"
-onclick="addIncomingRow()">
-+ Add Incoming
-</button>
+                <label>
+                    Opening Balance
+                </label>
 
-</div>
+                <!-- IMPORTANT:
+                     Initial value is ZERO -->
 
+                <input
+                    type="number"
+                    id="openingBalance"
+                    value="0"
+                    min="0"
+                    oninput="calculateReport()">
 
-<div class="table-wrapper">
+            </div>
 
-<table id="incomingTable">
+        </div>
 
-<thead>
+    </div>
 
-<tr>
 
-<th>Particular</th>
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================= -->
 
-<th>Amount (₹)</th>
+    <div class="summary-grid">
 
-<th>%</th>
 
-<th class="remove-column">
-Action
-</th>
+        <!-- OPENING BALANCE -->
 
-</tr>
+        <div class="summary-card opening">
 
-</thead>
+            <div class="summary-title">
 
+                Opening Balance
 
-<tbody>
+            </div>
 
+            <div
+                class="summary-value"
+                id="summaryOpening">
 
-<tr>
+                ₹0
 
-<td>
-<input
-type="text"
-value="Maintenance"
-oninput="calculateReport()"
->
-</td>
+            </div>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+        </div>
 
-<td class="percentage">
-0%
-</td>
 
-<td class="remove-column">
+        <!-- TOTAL INCOMING -->
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+        <div class="summary-card incoming">
 
-</td>
+            <div class="summary-title">
 
-</tr>
-<tr>
+                Total Incoming
 
-<td>
-<input
-type="text"
-value="AdOnMo"
-oninput="calculateReport()"
->
-</td>
+            </div>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+            <div
+                class="summary-value"
+                id="summaryIncoming">
 
-<td class="percentage">
-0%
-</td>
+                ₹0
 
-<td class="remove-column">
+            </div>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+        </div>
 
-</td>
 
-</tr>
+        <!-- TOTAL EXPENSES -->
 
-<tr>
+        <div class="summary-card expenses">
 
-<td>
-<input
-type="text"
-value="Airtel Tower"
-oninput="calculateReport()"
->
-</td>
+            <div class="summary-title">
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                Total Expenses
 
-<td class="percentage">
-0%
-</td>
+            </div>
 
-<td class="remove-column">
+            <div
+                class="summary-value"
+                id="summaryExpenses">
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                ₹0
 
-</td>
+            </div>
 
-</tr>
+        </div>
 
 
-<tr>
+        <!-- CLOSING BALANCE -->
 
-<td>
-<input
-type="text"
-value="Water Bill"
-oninput="calculateReport()"
->
-</td>
+        <div class="summary-card closing">
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+            <div class="summary-title">
 
-<td class="percentage">
-0%
-</td>
+                Closing Balance on Last Date of Month
 
-<td class="remove-column">
+            </div>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+            <div
+                class="summary-value"
+                id="closingBalance">
 
-</td>
+                ₹0
 
-</tr>
+            </div>
 
+        </div>
 
-<tr>
+    </div>
 
-<td>
-<input
-type="text"
-value="EV Charges"
-oninput="calculateReport()"
->
-</td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+    <!-- =================================================
+         ALL INCOMING
+    ================================================= -->
 
-<td class="percentage">
-0%
-</td>
+    <div class="section">
 
-<td class="remove-column">
+        <div class="section-header">
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+            <h2>
+                All Incoming
+            </h2>
 
-</td>
+            <button
+                class="add-btn"
+                onclick="addIncomingRow()">
 
-</tr>
+                + Add Incoming
 
+            </button>
 
-</tbody>
+        </div>
 
-</table>
 
-</div>
+        <div class="table-wrapper">
 
-</div>
+            <table id="incomingTable">
 
+                <thead>
 
-<!-- =====================================================
-     EXPENSES
-===================================================== -->
+                    <tr>
 
-<div class="section">
+                        <th>
+                            Category
+                        </th>
 
-<div class="section-title">
+                        <th>
+                            Amount
+                        </th>
 
-<h2 class="expense-title">
-All Expenses
-</h2>
+                        <th>
+                            Percentage
+                        </th>
 
-<button
-class="btn btn-red add-row"
-onclick="addExpenseRow()">
-+ Add Expense
-</button>
+                        <th>
+                            Action
+                        </th>
 
-</div>
+                    </tr>
 
+                </thead>
 
-<div class="table-wrapper">
 
-<table id="expenseTable">
+                <tbody>
 
-<thead>
 
-<tr>
+                    <!-- MAINTENANCE -->
 
-<th>Particular</th>
+                    <tr>
 
-<th>Amount (₹)</th>
+                        <td>
 
-<th>%</th>
+                            <input
+                                type="text"
+                                value="Maintenance"
+                                oninput="calculateReport()">
 
-<th class="remove-column">
-Action
-</th>
+                        </td>
 
-</tr>
+                        <td>
 
-</thead>
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
 
+                        </td>
 
-<tbody>
+                        <td class="percent">
 
+                            0%
 
-<tr>
+                        </td>
 
-<td>
-<input
-type="text"
-value="STP"
-oninput="calculateReport()"
->
-</td>
+                        <td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
 
-<td class="percentage">
-0%
-</td>
+                                Remove
 
-<td class="remove-column">
+                            </button>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                        </td>
 
-</td>
+                    </tr>
 
-</tr>
 
+                    <!-- RECEIVED -->
 
-<tr>
+                    <tr>
 
-<td>
-<input
-type="text"
-value="Security"
-oninput="calculateReport()"
->
-</td>
+                        <td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                            <input
+                                type="text"
+                                value="Received"
+                                oninput="calculateReport()">
 
-<td class="percentage">
-0%
-</td>
+                        </td>
 
-<td class="remove-column">
+                        <td>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
 
-</td>
+                        </td>
 
-</tr>
+                        <td class="percent">
 
+                            0%
 
-<tr>
+                        </td>
 
-<td>
-<input
-type="text"
-value="Swimming Pool"
-oninput="calculateReport()"
->
-</td>
+                        <td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
 
-<td class="percentage">
-0%
-</td>
+                                Remove
 
-<td class="remove-column">
+                            </button>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                        </td>
 
-</td>
+                    </tr>
 
-</tr>
 
+                    <!-- WATER -->
 
-<tr>
+                    <tr>
 
-<td>
-<input
-type="text"
-value="Gym"
-oninput="calculateReport()"
->
-</td>
+                        <td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                            <input
+                                type="text"
+                                value="Water Charges Received"
+                                oninput="calculateReport()">
 
-<td class="percentage">
-0%
-</td>
+                        </td>
 
-<td class="remove-column">
+                        <td>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
 
-</td>
+                        </td>
 
-</tr>
+                        <td class="percent">
 
+                            0%
 
-<tr>
+                        </td>
 
-<td>
-<input
-type="text"
-value="House Keeping"
-oninput="calculateReport()"
->
-</td>
+                        <td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
 
-<td class="percentage">
-0%
-</td>
+                                Remove
 
-<td class="remove-column">
+                            </button>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                        </td>
 
-</td>
+                    </tr>
 
-</tr>
 
+                    <!-- EV -->
 
-<tr>
+                    <tr>
 
-<td>
-<input
-type="text"
-value="Garbage"
-oninput="calculateReport()"
->
-</td>
+                        <td>
 
-<td>
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-</td>
+                            <input
+                                type="text"
+                                value="EV Charges"
+                                oninput="calculateReport()">
 
-<td class="percentage">
-0%
-</td>
+                        </td>
 
-<td class="remove-column">
+                        <td>
 
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
 
-</td>
+                        </td>
 
-</tr>
+                        <td class="percent">
 
+                            0%
 
-</tbody>
+                        </td>
 
-</table>
+                        <td>
 
-</div>
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
 
-</div>
+                                Remove
 
+                            </button>
 
-<!-- =====================================================
-     SUMMARY
-===================================================== -->
+                        </td>
 
-<div class="summary">
+                    </tr>
 
-<div class="summary-card opening-card">
+                </tbody>
 
-<small>
-Opening Balance
-</small>
+            </table>
 
-<strong id="summaryOpening">
-₹0
-</strong>
+        </div>
 
-</div>
+    </div>
 
 
-<div class="summary-card incoming-card">
+    <!-- =================================================
+         ALL EXPENSES
+    ================================================= -->
 
-<small>
-Total Incoming
-</small>
+    <div class="section">
 
-<strong id="summaryIncoming">
-₹0
-</strong>
+        <div class="section-header">
 
-</div>
+            <h2>
+                All Expenses
+            </h2>
 
+            <button
+                class="add-btn"
+                onclick="addExpenseRow()">
 
-<div class="summary-card expense-card">
+                + Add Expense
 
-<small>
-Total Expenses
-</small>
+            </button>
 
-<strong id="summaryExpenses">
-₹0
-</strong>
+        </div>
 
-</div>
 
-</div>
+        <div class="table-wrapper">
 
+            <table id="expenseTable">
 
-<!-- =====================================================
-     CHARTS
-===================================================== -->
+                <thead>
 
-<div class="charts">
+                    <tr>
 
+                        <th>
+                            Category
+                        </th>
 
-<div class="chart-card">
+                        <th>
+                            Amount
+                        </th>
 
-<h3>
-Incoming Distribution
-</h3>
+                        <th>
+                            Percentage
+                        </th>
 
-<div class="chart-wrapper">
+                        <th>
+                            Action
+                        </th>
 
-<canvas
-id="incomingChart"
-width="300"
-height="300">
-</canvas>
+                    </tr>
 
-</div>
+                </thead>
 
-<div
-class="legend"
-id="incomingLegend">
-</div>
 
-</div>
+                <tbody>
 
 
-<div class="chart-card">
+                    <!-- STP -->
 
-<h3>
-Expense Distribution
-</h3>
+                    <tr>
 
-<div class="chart-wrapper">
+                        <td>
 
-<canvas
-id="expenseChart"
-width="300"
-height="300">
-</canvas>
+                            <input
+                                type="text"
+                                value="STP"
+                                oninput="calculateReport()">
 
-</div>
+                        </td>
 
-<div
-class="legend"
-id="expenseLegend">
-</div>
+                        <td>
 
-</div>
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
 
-</div>
+                        </td>
 
+                        <td class="percent">
 
-<!-- =====================================================
-     CLOSING
-===================================================== -->
+                            0%
 
-<div class="closing">
+                        </td>
 
-<small>
-Closing Balance on Last Date of Month
-</small>
+                        <td>
 
-<strong id="closingBalance">
-₹0
-</strong>
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
 
-</div>
+                                Remove
 
+                            </button>
 
-<!-- =====================================================
-     EXPORT
-===================================================== -->
+                        </td>
 
-<div class="export-section">
+                    </tr>
 
-<label>
-<strong>
-Save Report:
-</strong>
-</label>
 
-<select id="exportFormat">
+                    <!-- SECURITY -->
 
-<option value="">
-Select Format
-</option>
+                    <tr>
 
-<option value="pdf">
-PDF
-</option>
+                        <td>
 
-<option value="jpeg">
-JPEG
-</option>
+                            <input
+                                type="text"
+                                value="Security"
+                                oninput="calculateReport()">
 
-</select>
+                        </td>
 
+                        <td>
 
-<button
-class="btn btn-blue"
-onclick="exportReport()">
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
 
-Export
+                        </td>
 
-</button>
+                        <td class="percent">
 
-</div>
+                            0%
 
+                        </td>
 
-<div class="footer">
-@SSO , All Right Reserve
-</div>
+                        <td>
 
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
 
-</div>
+                                Remove
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- SWIMMING POOL -->
+
+                    <tr>
+
+                        <td>
+
+                            <input
+                                type="text"
+                                value="Swimming Pool"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td class="percent">
+
+                            0%
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
+
+                                Remove
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- GYM -->
+
+                    <tr>
+
+                        <td>
+
+                            <input
+                                type="text"
+                                value="Gym"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td class="percent">
+
+                            0%
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
+
+                                Remove
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- HOUSE KEEPING -->
+
+                    <tr>
+
+                        <td>
+
+                            <input
+                                type="text"
+                                value="House Keeping"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td class="percent">
+
+                            0%
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
+
+                                Remove
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- PENALTY -->
+
+                    <tr>
+
+                        <td>
+
+                            <input
+                                type="text"
+                                value="Penalty"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td>
+
+                            <input
+                                class="amount-input"
+                                type="number"
+                                value="0"
+                                min="0"
+                                oninput="calculateReport()">
+
+                        </td>
+
+                        <td class="percent">
+
+                            0%
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="remove-btn"
+                                onclick="removeRow(this)">
+
+                                Remove
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CHARTS
+    ================================================= -->
+
+    <div class="chart-grid">
+
+
+        <!-- INCOMING -->
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                Incoming Distribution
+
+            </div>
+
+            <div class="chart-container">
+
+                <canvas
+                    id="incomingChart">
+                </canvas>
+
+            </div>
+
+            <div
+                class="legend"
+                id="incomingLegend">
+            </div>
+
+        </div>
+
+
+        <!-- EXPENSE -->
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                Expense Distribution
+
+            </div>
+
+            <div class="chart-container">
+
+                <canvas
+                    id="expenseChart">
+                </canvas>
+
+            </div>
+
+            <div
+                class="legend"
+                id="expenseLegend">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         EXPORT
+    ================================================= -->
+
+    <div class="export-section">
+
+        <div class="export-controls">
+
+
+            <div class="form-group">
+
+                <label>
+                    Export Format
+                </label>
+
+                <select id="exportType">
+
+                    <option value="pdf">
+                        PDF
+                    </option>
+
+                    <option value="jpeg">
+                        JPEG
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="export-btn"
+                onclick="exportReport()">
+
+                Export Report
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        @SSO , All Right Reserved
+
+    </div>
 
 </div>
 
 
 <script>
 
-/* =========================================================
-   COLORS
-========================================================= */
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
 
-const incomingColors = [
-"#2563eb",
-"#16a34a",
-"#f59e0b",
-"#9333ea",
-"#0891b2",
-"#db2777",
-"#65a30d",
-"#ea580c"
-];
+let incomingChart = null;
 
-const expenseColors = [
-"#dc2626",
-"#2563eb",
-"#f59e0b",
-"#9333ea",
-"#0891b2",
-"#16a34a",
-"#db2777",
-"#65a30d",
-"#ea580c",
-"#7c3aed"
-];
+let expenseChart = null;
 
 
-/* =========================================================
-   CURRENCY
-========================================================= */
+/* =====================================================
+   FORMAT CURRENCY
+===================================================== */
 
-function formatCurrency(value) {
+function formatCurrency(
+    value
+) {
 
-return "₹" +
-Number(value || 0).toLocaleString(
-"en-IN",
-{
-maximumFractionDigits:0
-}
-);
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            style:
+                "currency",
+
+            currency:
+                "INR",
+
+            maximumFractionDigits:
+                0
+        }
+    ).format(
+        value || 0
+    );
 
 }
 
 
-/* =========================================================
-   REPORT NAME
-========================================================= */
+/* =====================================================
+   UPDATE REPORT NAME
+===================================================== */
 
 function updateReportName() {
 
-const name =
-document.getElementById(
-"reportName"
-).value.trim()
-||
-"Monthly Financial Report";
+    const input =
+        document.getElementById(
+            "reportName"
+        );
 
-document.getElementById(
-"pageReportName"
-).innerText =
-name;
+
+    const name =
+        input.value.trim() ||
+        "Monthly Financial Report";
+
+
+    document.getElementById(
+        "reportNameDisplay"
+    ).textContent =
+        name;
 
 }
 
 
-/* =========================================================
-   MONTH
-========================================================= */
+/* =====================================================
+   GET FORMATTED MONTH
+===================================================== */
 
 function getFormattedMonth() {
 
-const value =
-document.getElementById(
-"reportMonth"
-).value;
+    const value =
+        document.getElementById(
+            "reportMonth"
+        ).value;
 
-if(!value) {
 
-return "Monthly Expense & Income Statement";
+    if (!value) {
+
+        return "Financial Report";
+
+    }
+
+
+    const date =
+        new Date(
+            value + "-01"
+        );
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            month:
+                "long",
+
+            year:
+                "numeric"
+        }
+    );
 
 }
 
-const date =
-new Date(value + "-01");
 
-return date.toLocaleDateString(
-"en-IN",
-{
-month:"long",
-year:"numeric"
-}
-);
-
-}
-
-
-/* =========================================================
+/* =====================================================
    GET TABLE DATA
-========================================================= */
+===================================================== */
 
-function getTableData(tableId) {
-
-const rows =
-document.querySelectorAll(
-`#${tableId} tbody tr`
-);
-
-const data = [];
-
-rows.forEach(row => {
-
-const inputs =
-row.querySelectorAll(
-"input"
-);
-
-if(inputs.length >= 2) {
-
-const name =
-inputs[0].value.trim();
-
-const amount =
-Number(inputs[1].value) || 0;
-
-if(
-name !== "" ||
-amount !== 0
+function getTableData(
+    tableId
 ) {
 
-data.push({
-name:
-name || "Unnamed",
-amount:
-amount
-});
+    const rows =
+        document.querySelectorAll(
+            `#${tableId} tbody tr`
+        );
+
+
+    const data = [];
+
+
+    rows.forEach(
+        row => {
+
+            const inputs =
+                row.querySelectorAll(
+                    "input"
+                );
+
+
+            if (
+                inputs.length >= 2
+            ) {
+
+                const name =
+                    inputs[0]
+                        .value
+                        .trim();
+
+
+                const amount =
+                    parseFloat(
+                        inputs[1].value
+                    ) || 0;
+
+
+                data.push({
+
+                    name:
+                        name ||
+                        "Unnamed",
+
+                    amount:
+                        amount
+
+                });
+
+            }
+
+        }
+    );
+
+
+    return data;
 
 }
 
-}
 
-});
-
-return data;
-
-}
-
-
-/* =========================================================
+/* =====================================================
    CALCULATE REPORT
-========================================================= */
+===================================================== */
 
 function calculateReport() {
 
-updateReportName();
-
-document.getElementById(
-"pageMonth"
-).innerText =
-getFormattedMonth();
+    updateReportName();
 
 
-const opening =
-Number(
-document.getElementById(
-"openingBalance"
-).value
-) || 0;
+    document.getElementById(
+        "reportMonthText"
+    ).textContent =
+        getFormattedMonth();
 
 
-const incoming =
-getTableData(
-"incomingTable"
-);
+    /*
+       Opening balance starts at ZERO
+    */
+
+    const opening =
+        parseFloat(
+            document.getElementById(
+                "openingBalance"
+            ).value
+        ) || 0;
 
 
-const expenses =
-getTableData(
-"expenseTable"
-);
+    const incoming =
+        getTableData(
+            "incomingTable"
+        );
 
 
-const totalIncoming =
-incoming.reduce(
-(sum,item) =>
-sum + item.amount,
-0
-);
+    const expenses =
+        getTableData(
+            "expenseTable"
+        );
 
 
-const totalExpenses =
-expenses.reduce(
-(sum,item) =>
-sum + item.amount,
-0
-);
+    const totalIncoming =
+        incoming.reduce(
+            (sum, item) =>
+                sum + item.amount,
+            0
+        );
 
 
-const closing =
-opening +
-totalIncoming -
-totalExpenses;
+    const totalExpenses =
+        expenses.reduce(
+            (sum, item) =>
+                sum + item.amount,
+            0
+        );
 
 
-document.getElementById(
-"summaryOpening"
-).innerText =
-formatCurrency(opening);
+    const closing =
+        opening +
+        totalIncoming -
+        totalExpenses;
 
 
-document.getElementById(
-"summaryIncoming"
-).innerText =
-formatCurrency(totalIncoming);
+    /*
+       SUMMARY
+    */
+
+    document.getElementById(
+        "summaryOpening"
+    ).textContent =
+        formatCurrency(
+            opening
+        );
 
 
-document.getElementById(
-"summaryExpenses"
-).innerText =
-formatCurrency(totalExpenses);
+    document.getElementById(
+        "summaryIncoming"
+    ).textContent =
+        formatCurrency(
+            totalIncoming
+        );
 
 
-document.getElementById(
-"closingBalance"
-).innerText =
-formatCurrency(closing);
+    document.getElementById(
+        "summaryExpenses"
+    ).textContent =
+        formatCurrency(
+            totalExpenses
+        );
 
 
-updateTablePercentages(
-"incomingTable",
-totalIncoming
-);
+    document.getElementById(
+        "closingBalance"
+    ).textContent =
+        formatCurrency(
+            closing
+        );
 
 
-updateTablePercentages(
-"expenseTable",
-totalExpenses
-);
+    /*
+       TABLE PERCENTAGES
+    */
+
+    updateTablePercentages(
+        "incomingTable",
+        totalIncoming
+    );
 
 
-drawPieChart(
-"incomingChart",
-incoming,
-incomingColors,
-"incomingLegend"
-);
+    updateTablePercentages(
+        "expenseTable",
+        totalExpenses
+    );
 
 
-drawPieChart(
-"expenseChart",
-expenses,
-expenseColors,
-"expenseLegend"
-);
+    /*
+       CHARTS
+    */
+
+    drawPieChart(
+        "incomingChart",
+        incoming,
+        "incoming"
+    );
+
+
+    drawPieChart(
+        "expenseChart",
+        expenses,
+        "expense"
+    );
 
 }
 
 
-/* =========================================================
-   UPDATE PERCENTAGES
-========================================================= */
+/* =====================================================
+   TABLE PERCENTAGES
+===================================================== */
 
 function updateTablePercentages(
-tableId,
-total
+    tableId,
+    total
 ) {
 
-const rows =
-document.querySelectorAll(
-`#${tableId} tbody tr`
-);
+    const rows =
+        document.querySelectorAll(
+            `#${tableId} tbody tr`
+        );
 
-rows.forEach(row => {
 
-const inputs =
-row.querySelectorAll(
-"input"
-);
+    rows.forEach(
+        row => {
 
-const cell =
-row.querySelector(
-".percentage"
-);
+            const input =
+                row.querySelector(
+                    ".amount-input"
+                );
 
-if(
-!inputs[1] ||
-!cell
-) return;
 
-const amount =
-Number(inputs[1].value) || 0;
+            const percentCell =
+                row.querySelector(
+                    ".percent"
+                );
 
-const percentage =
-total > 0
-?
-amount / total * 100
-:
-0;
 
-cell.innerText =
-percentage.toFixed(1) +
-"%";
+            if (
+                !input ||
+                !percentCell
+            ) {
 
-});
+                return;
+
+            }
+
+
+            const amount =
+                parseFloat(
+                    input.value
+                ) || 0;
+
+
+            const percentage =
+                total > 0
+                    ? amount /
+                      total *
+                      100
+                    : 0;
+
+
+            percentCell.textContent =
+                percentage.toFixed(
+                    1
+                ) +
+                "%";
+
+        }
+    );
 
 }
 
 
-/* =========================================================
-   PIE CHART
-========================================================= */
+/* =====================================================
+   DRAW PIE CHART
+===================================================== */
 
 function drawPieChart(
-canvasId,
-data,
-colors,
-legendId
+    canvasId,
+    data,
+    type
 ) {
 
-const canvas =
-document.getElementById(
-canvasId
-);
-
-const ctx =
-canvas.getContext("2d");
-
-const width =
-canvas.width;
-
-const height =
-canvas.height;
-
-ctx.clearRect(
-0,
-0,
-width,
-height
-);
+    const canvas =
+        document.getElementById(
+            canvasId
+        );
 
 
-const total =
-data.reduce(
-(sum,item) =>
-sum + item.amount,
-0
-);
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
 
 
-if(total <= 0) {
+    const labels =
+        data.map(
+            item =>
+                item.name
+        );
 
-ctx.beginPath();
 
-ctx.arc(
-width/2,
-height/2,
-100,
-0,
-Math.PI*2
-);
+    const values =
+        data.map(
+            item =>
+                item.amount
+        );
 
-ctx.fillStyle =
-"#e5e7eb";
 
-ctx.fill();
+    const colors = [
 
-ctx.fillStyle =
-"#6b7280";
+        "#2563eb",
 
-ctx.font =
-"bold 15px Arial";
+        "#16a34a",
 
-ctx.textAlign =
-"center";
+        "#f59e0b",
 
-ctx.fillText(
-"No Data",
-width/2,
-height/2+5
-);
+        "#dc2626",
 
-document.getElementById(
-legendId
-).innerHTML = "";
+        "#7c3aed",
 
-return;
+        "#0891b2",
+
+        "#db2777",
+
+        "#65a30d",
+
+        "#ea580c",
+
+        "#4f46e5"
+
+    ];
+
+
+    const config = {
+
+        type:
+            "doughnut",
+
+
+        data: {
+
+            labels:
+                labels,
+
+
+            datasets: [
+
+                {
+
+                    data:
+                        values,
+
+                    backgroundColor:
+                        colors.slice(
+                            0,
+                            values.length
+                        ),
+
+                    borderWidth:
+                        2,
+
+                    borderColor:
+                        "#ffffff"
+
+                }
+
+            ]
+
+        },
+
+
+        options: {
+
+            responsive:
+                true,
+
+            maintainAspectRatio:
+                false,
+
+
+            plugins: {
+
+                legend: {
+
+                    display:
+                        false
+
+                },
+
+
+                tooltip: {
+
+                    callbacks: {
+
+                        label:
+                            function(
+                                context
+                            ) {
+
+                                const total =
+                                    values.reduce(
+                                        (a,b) =>
+                                            a + b,
+                                        0
+                                    );
+
+
+                                const value =
+                                    context.raw;
+
+
+                                const percentage =
+                                    total > 0
+                                        ? value /
+                                          total *
+                                          100
+                                        : 0;
+
+
+                                return (
+                                    context.label +
+                                    ": " +
+                                    formatCurrency(
+                                        value
+                                    ) +
+                                    " (" +
+                                    percentage.toFixed(
+                                        1
+                                    ) +
+                                    "%)"
+                                );
+
+                            }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    };
+
+
+    if (
+        type === "incoming"
+    ) {
+
+        if (
+            incomingChart
+        ) {
+
+            incomingChart.destroy();
+
+        }
+
+
+        incomingChart =
+            new Chart(
+                ctx,
+                config
+            );
+
+    }
+
+    else {
+
+        if (
+            expenseChart
+        ) {
+
+            expenseChart.destroy();
+
+        }
+
+
+        expenseChart =
+            new Chart(
+                ctx,
+                config
+            );
+
+    }
+
+
+    createLegend(
+        data,
+        type
+    );
 
 }
 
 
-let startAngle =
--Math.PI/2;
+/* =====================================================
+   CREATE LEGEND
+===================================================== */
+
+function createLegend(
+    data,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            type === "incoming"
+                ? "incomingLegend"
+                : "expenseLegend"
+        );
 
 
-data.forEach(
-(item,index) => {
+    const colors = [
 
-const sliceAngle =
-item.amount /
-total *
-Math.PI*2;
+        "#2563eb",
 
+        "#16a34a",
 
-ctx.beginPath();
+        "#f59e0b",
 
-ctx.moveTo(
-width/2,
-height/2
-);
+        "#dc2626",
 
-ctx.arc(
-width/2,
-height/2,
-105,
-startAngle,
-startAngle +
-sliceAngle
-);
+        "#7c3aed",
 
-ctx.closePath();
+        "#0891b2",
 
-ctx.fillStyle =
-colors[
-index %
-colors.length
-];
+        "#db2777",
 
-ctx.fill();
+        "#65a30d",
 
-startAngle +=
-sliceAngle;
+        "#ea580c",
 
-}
-);
+        "#4f46e5"
+
+    ];
 
 
-/* Donut center */
-
-ctx.beginPath();
-
-ctx.arc(
-width/2,
-height/2,
-55,
-0,
-Math.PI*2
-);
-
-ctx.fillStyle =
-"#ffffff";
-
-ctx.fill();
+    const total =
+        data.reduce(
+            (sum, item) =>
+                sum + item.amount,
+            0
+        );
 
 
-ctx.fillStyle =
-"#111827";
-
-ctx.font =
-"bold 14px Arial";
-
-ctx.textAlign =
-"center";
-
-ctx.fillText(
-formatCurrency(total),
-width/2,
-height/2+5
-);
+    element.innerHTML =
+        "";
 
 
-/* Legend */
+    data.forEach(
+        (item, index) => {
 
-const legend =
-document.getElementById(
-legendId
-);
-
-legend.innerHTML = "";
-
-
-data.forEach(
-(item,index) => {
-
-const percentage =
-item.amount /
-total *
-100;
+            const percentage =
+                total > 0
+                    ? item.amount /
+                      total *
+                      100
+                    : 0;
 
 
-const div =
-document.createElement(
-"div"
-);
-
-div.className =
-"legend-item";
+            const div =
+                document.createElement(
+                    "div"
+                );
 
 
-div.innerHTML = `
-
-<div class="legend-left">
-
-<span
-class="legend-color"
-style="
-background:
-${colors[
-index %
-colors.length
-]};
-">
-</span>
-
-<span>
-${escapeHtml(
-item.name
-)}
-</span>
-
-</div>
-
-<strong>
-${formatCurrency(
-item.amount
-)}
-(${percentage.toFixed(1)}%)
-</strong>
-
-`;
+            div.className =
+                "legend-item";
 
 
-legend.appendChild(div);
+            div.innerHTML = `
 
-}
-);
+                <div class="legend-left">
+
+                    <span
+                        class="legend-color"
+                        style="
+                            background:
+                            ${
+                                colors[
+                                    index %
+                                    colors.length
+                                ]
+                            }
+                        ">
+                    </span>
+
+                    <span>
+                        ${escapeHtml(
+                            item.name
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    ${formatCurrency(
+                        item.amount
+                    )}
+
+                    &nbsp;
+
+                    <strong>
+                        ${percentage.toFixed(
+                            1
+                        )}%
+                    </strong>
+
+                </div>
+
+            `;
+
+
+            element.appendChild(
+                div
+            );
+
+        }
+    );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ADD INCOMING
-========================================================= */
+===================================================== */
 
 function addIncomingRow() {
 
-const tbody =
-document.querySelector(
-"#incomingTable tbody"
-);
-
-const row =
-document.createElement("tr");
+    const tbody =
+        document.querySelector(
+            "#incomingTable tbody"
+        );
 
 
-row.innerHTML = `
-
-<td>
-
-<input
-type="text"
-placeholder="Incoming source"
-oninput="calculateReport()"
->
-
-</td>
-
-<td>
-
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-
-</td>
-
-<td class="percentage">
-0%
-</td>
-
-<td class="remove-column">
-
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
-
-</td>
-
-`;
+    const row =
+        document.createElement(
+            "tr"
+        );
 
 
-tbody.appendChild(row);
+    row.innerHTML = `
 
-calculateReport();
+        <td>
+
+            <input
+                type="text"
+                value="New Incoming"
+                oninput="calculateReport()">
+
+        </td>
+
+
+        <td>
+
+            <input
+                class="amount-input"
+                type="number"
+                value="0"
+                min="0"
+                oninput="calculateReport()">
+
+        </td>
+
+
+        <td class="percent">
+
+            0%
+
+        </td>
+
+
+        <td>
+
+            <button
+                class="remove-btn"
+                onclick="removeRow(this)">
+
+                Remove
+
+            </button>
+
+        </td>
+
+    `;
+
+
+    tbody.appendChild(
+        row
+    );
+
+
+    calculateReport();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ADD EXPENSE
-========================================================= */
+===================================================== */
 
 function addExpenseRow() {
 
-const tbody =
-document.querySelector(
-"#expenseTable tbody"
-);
-
-const row =
-document.createElement("tr");
+    const tbody =
+        document.querySelector(
+            "#expenseTable tbody"
+        );
 
 
-row.innerHTML = `
-
-<td>
-
-<input
-type="text"
-placeholder="Expense"
-oninput="calculateReport()"
->
-
-</td>
-
-<td>
-
-<input
-class="amount-input"
-type="number"
-value="0"
-oninput="calculateReport()"
->
-
-</td>
-
-<td class="percentage">
-0%
-</td>
-
-<td class="remove-column">
-
-<button
-class="remove-btn"
-onclick="removeRow(this)">
-×
-</button>
-
-</td>
-
-`;
+    const row =
+        document.createElement(
+            "tr"
+        );
 
 
-tbody.appendChild(row);
+    row.innerHTML = `
 
-calculateReport();
+        <td>
+
+            <input
+                type="text"
+                value="New Expense"
+                oninput="calculateReport()">
+
+        </td>
+
+
+        <td>
+
+            <input
+                class="amount-input"
+                type="number"
+                value="0"
+                min="0"
+                oninput="calculateReport()">
+
+        </td>
+
+
+        <td class="percent">
+
+            0%
+
+        </td>
+
+
+        <td>
+
+            <button
+                class="remove-btn"
+                onclick="removeRow(this)">
+
+                Remove
+
+            </button>
+
+        </td>
+
+    `;
+
+
+    tbody.appendChild(
+        row
+    );
+
+
+    calculateReport();
 
 }
 
 
-/* =========================================================
+/* =====================================================
    REMOVE ROW
-========================================================= */
+===================================================== */
 
-function removeRow(button) {
+function removeRow(
+    button
+) {
 
-const row =
-button.closest("tr");
+    const row =
+        button.closest(
+            "tr"
+        );
 
-if(row) {
-row.remove();
+
+    if (row) {
+
+        row.remove();
+
+    }
+
+
+    calculateReport();
+
 }
 
-calculateReport();
 
-}
-
-
-/* =========================================================
+/* =====================================================
    ESCAPE HTML
-========================================================= */
+===================================================== */
 
-function escapeHtml(value) {
+function escapeHtml(
+    value
+) {
 
-return String(value)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    EXPORT
-========================================================= */
+===================================================== */
 
 function exportReport() {
 
-const format =
-document.getElementById(
-"exportFormat"
-).value;
+    const type =
+        document.getElementById(
+            "exportType"
+        ).value;
 
 
-if(!format) {
+    if (
+        type === "pdf"
+    ) {
 
-alert(
-"Please select PDF or JPEG."
-);
+        exportPDF();
 
-return;
+    }
 
-}
+    else {
 
+        saveFullJPEG();
 
-if(format === "pdf") {
-
-window.print();
-
-}
-
-
-if(format === "jpeg") {
-
-saveFullJPEG();
-
-}
+    }
 
 }
 
 
-/* =========================================================
-   PORTRAIT JPEG EXPORT
-========================================================= */
-
-function saveFullJPEG() {
-
-const reportName =
-document.getElementById(
-"reportName"
-).value.trim()
-||
-"Monthly Financial Report";
-
-
-const month =
-getFormattedMonth();
-
-
-const opening =
-Number(
-document.getElementById(
-"openingBalance"
-).value
-) || 0;
-
-
-const incoming =
-getTableData(
-"incomingTable"
-);
-
-
-const expenses =
-getTableData(
-"expenseTable"
-);
-
-
-const totalIncoming =
-incoming.reduce(
-(sum,item) =>
-sum + item.amount,
-0
-);
-
-
-const totalExpenses =
-expenses.reduce(
-(sum,item) =>
-sum + item.amount,
-0
-);
-
-
-const closing =
-opening +
-totalIncoming -
-totalExpenses;
-
-
-/*
- * PORTRAIT MOBILE REPORT
- */
-
-const width = 1080;
-
-const maxRows =
-Math.max(
-incoming.length,
-expenses.length
-);
-
-
-/*
- * Dynamic height ensures
- * no rows are cropped.
- */
-
-const height =
-1900 +
-maxRows * 75;
-
-
-const canvas =
-document.createElement(
-"canvas"
-);
-
-canvas.width =
-width;
-
-canvas.height =
-height;
-
-
-const ctx =
-canvas.getContext("2d");
-
-
-/* Background */
-
-ctx.fillStyle =
-"#f4f6f9";
-
-ctx.fillRect(
-0,
-0,
-width,
-height
-);
-
-
-/* White report */
-
-const margin = 35;
-
-ctx.fillStyle =
-"#ffffff";
-
-ctx.fillRect(
-margin,
-margin,
-width -
-margin*2,
-height -
-margin*2
-);
-
-
-let y = 95;
-
-
 /* =====================================================
-   HEADER
+   PDF
 ===================================================== */
 
-ctx.textAlign =
-"center";
+function exportPDF() {
 
-ctx.fillStyle =
-"#111827";
+    calculateReport();
 
-ctx.font =
-"bold 38px Arial";
-
-ctx.fillText(
-reportName,
-width/2,
-y
-);
-
-
-y += 48;
-
-
-ctx.font =
-"22px Arial";
-
-ctx.fillStyle =
-"#6b7280";
-
-ctx.fillText(
-month,
-width/2,
-y
-);
-
-
-y += 45;
-
-
-ctx.strokeStyle =
-"#e5e7eb";
-
-ctx.lineWidth = 2;
-
-ctx.beginPath();
-
-ctx.moveTo(
-70,
-y
-);
-
-ctx.lineTo(
-width-70,
-y
-);
-
-ctx.stroke();
-
-
-y += 55;
-
-
-/* =====================================================
-   OPENING BALANCE
-===================================================== */
-
-ctx.textAlign =
-"left";
-
-ctx.font =
-"bold 23px Arial";
-
-ctx.fillStyle =
-"#2563eb";
-
-ctx.fillText(
-"Opening Balance",
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillStyle =
-"#111827";
-
-ctx.fillText(
-formatCurrency(opening),
-width-70,
-y
-);
-
-
-y += 65;
-
-
-/* =====================================================
-   INCOMING
-===================================================== */
-
-ctx.textAlign =
-"left";
-
-ctx.font =
-"bold 27px Arial";
-
-ctx.fillStyle =
-"#15803d";
-
-ctx.fillText(
-"All Incoming",
-70,
-y
-);
-
-
-y += 38;
-
-
-ctx.font =
-"bold 17px Arial";
-
-ctx.fillStyle =
-"#6b7280";
-
-ctx.fillText(
-"Particular",
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillText(
-"Amount",
-790,
-y
-);
-
-ctx.fillText(
-"%",
-1000,
-y
-);
-
-
-y += 15;
-
-
-ctx.strokeStyle =
-"#d1d5db";
-
-ctx.beginPath();
-
-ctx.moveTo(
-70,
-y
-);
-
-ctx.lineTo(
-1010,
-y
-);
-
-ctx.stroke();
-
-
-y += 35;
-
-
-incoming.forEach(
-item => {
-
-const percentage =
-totalIncoming > 0
-?
-item.amount /
-totalIncoming *
-100
-:
-0;
-
-
-ctx.font =
-"18px Arial";
-
-ctx.fillStyle =
-"#1f2937";
-
-ctx.textAlign =
-"left";
-
-ctx.fillText(
-item.name,
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillText(
-formatCurrency(
-item.amount
-),
-790,
-y
-);
-
-
-ctx.fillText(
-percentage.toFixed(1)+"%",
-1000,
-y
-);
-
-
-y += 43;
-
-}
-);
-
-
-y += 5;
-
-ctx.strokeStyle =
-"#e5e7eb";
-
-ctx.beginPath();
-
-ctx.moveTo(
-70,
-y
-);
-
-ctx.lineTo(
-1010,
-y
-);
-
-ctx.stroke();
-
-
-y += 35;
-
-
-ctx.font =
-"bold 19px Arial";
-
-ctx.fillStyle =
-"#15803d";
-
-ctx.textAlign =
-"left";
-
-ctx.fillText(
-"Total Incoming",
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillText(
-formatCurrency(
-totalIncoming
-),
-790,
-y
-);
-
-
-y += 75;
-
-
-/* =====================================================
-   EXPENSES
-===================================================== */
-
-ctx.textAlign =
-"left";
-
-ctx.font =
-"bold 27px Arial";
-
-ctx.fillStyle =
-"#dc2626";
-
-ctx.fillText(
-"All Expenses",
-70,
-y
-);
-
-
-y += 38;
-
-
-ctx.font =
-"bold 17px Arial";
-
-ctx.fillStyle =
-"#6b7280";
-
-ctx.fillText(
-"Particular",
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillText(
-"Amount",
-790,
-y
-);
-
-ctx.fillText(
-"%",
-1000,
-y
-);
-
-
-y += 15;
-
-
-ctx.strokeStyle =
-"#d1d5db";
-
-ctx.beginPath();
-
-ctx.moveTo(
-70,
-y
-);
-
-ctx.lineTo(
-1010,
-y
-);
-
-ctx.stroke();
-
-
-y += 35;
-
-
-expenses.forEach(
-item => {
-
-const percentage =
-totalExpenses > 0
-?
-item.amount /
-totalExpenses *
-100
-:
-0;
-
-
-ctx.font =
-"18px Arial";
-
-ctx.fillStyle =
-"#1f2937";
-
-ctx.textAlign =
-"left";
-
-ctx.fillText(
-item.name,
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillText(
-formatCurrency(
-item.amount
-),
-790,
-y
-);
-
-
-ctx.fillText(
-percentage.toFixed(1)+"%",
-1000,
-y
-);
-
-
-y += 43;
-
-}
-);
-
-
-y += 5;
-
-ctx.strokeStyle =
-"#e5e7eb";
-
-ctx.beginPath();
-
-ctx.moveTo(
-70,
-y
-);
-
-ctx.lineTo(
-1010,
-y
-);
-
-ctx.stroke();
-
-
-y += 35;
-
-
-ctx.font =
-"bold 19px Arial";
-
-ctx.fillStyle =
-"#dc2626";
-
-ctx.textAlign =
-"left";
-
-ctx.fillText(
-"Total Expenses",
-70,
-y
-);
-
-
-ctx.textAlign =
-"right";
-
-ctx.fillText(
-formatCurrency(
-totalExpenses
-),
-790,
-y
-);
-
-
-y += 80;
-
-
-/* =====================================================
-   INCOMING CHART
-===================================================== */
-
-ctx.textAlign =
-"center";
-
-ctx.font =
-"bold 23px Arial";
-
-ctx.fillStyle =
-"#15803d";
-
-ctx.fillText(
-"Incoming Distribution",
-width/2,
-y
-);
-
-
-y += 170;
-
-
-drawCanvasPie(
-ctx,
-width/2,
-y,
-125,
-incoming,
-incomingColors,
-totalIncoming
-);
-
-
-y += 155;
-
-
-drawPortraitLegend(
-ctx,
-incoming,
-incomingColors,
-totalIncoming,
-y
-);
-
-
-y +=
-incoming.length *
-32 +
-60;
-
-
-/* =====================================================
-   EXPENSE CHART
-===================================================== */
-
-ctx.textAlign =
-"center";
-
-ctx.font =
-"bold 23px Arial";
-
-ctx.fillStyle =
-"#dc2626";
-
-ctx.fillText(
-"Expense Distribution",
-width/2,
-y
-);
-
-
-y += 170;
-
-
-drawCanvasPie(
-ctx,
-width/2,
-y,
-125,
-expenses,
-expenseColors,
-totalExpenses
-);
-
-
-y += 155;
-
-
-drawPortraitLegend(
-ctx,
-expenses,
-expenseColors,
-totalExpenses,
-y
-);
-
-
-y +=
-expenses.length *
-32 +
-60;
-
-
-/* =====================================================
-   CLOSING BALANCE
-===================================================== */
-
-ctx.fillStyle =
-"#111827";
-
-ctx.fillRect(
-70,
-y,
-width-140,
-120
-);
-
-
-ctx.textAlign =
-"center";
-
-ctx.fillStyle =
-"#ffffff";
-
-ctx.font =
-"18px Arial";
-
-ctx.fillText(
-"Closing Balance — Last Date of Month",
-width/2,
-y+42
-);
-
-
-ctx.font =
-"bold 34px Arial";
-
-ctx.fillText(
-formatCurrency(
-closing
-),
-width/2,
-y+88
-);
-
-
-/* Footer */
-
-ctx.fillStyle =
-"#9ca3af";
-
-ctx.font =
-"14px Arial";
-
-ctx.fillText(
-"Monthly Financial Report",
-width/2,
-height-60
-);
-
-
-/* =====================================================
-   DOWNLOAD
-===================================================== */
-
-const safeName =
-reportName
-.replace(
-/[^a-z0-9]/gi,
-"-"
-)
-.replace(
-/-+/g,
-"-"
-);
-
-
-const safeMonth =
-document.getElementById(
-"reportMonth"
-).value ||
-"report";
-
-
-const link =
-document.createElement("a");
-
-
-link.download =
-safeName +
-"-" +
-safeMonth +
-"-Portrait.jpeg";
-
-
-link.href =
-canvas.toDataURL(
-"image/jpeg",
-0.95
-);
-
-
-link.click();
+    window.print();
 
 }
 
 
-/* =========================================================
-   PORTRAIT LEGEND
-========================================================= */
+/* =====================================================
+   JPEG EXPORT
+===================================================== */
 
-function drawPortraitLegend(
-ctx,
-data,
-colors,
-total,
-startY
+async function saveFullJPEG() {
+
+    calculateReport();
+
+
+    const reportName =
+        document.getElementById(
+            "reportName"
+        ).value.trim() ||
+        "Monthly Financial Report";
+
+
+    const month =
+        document.getElementById(
+            "reportMonth"
+        ).value ||
+        "report";
+
+
+    const opening =
+        parseFloat(
+            document.getElementById(
+                "openingBalance"
+            ).value
+        ) || 0;
+
+
+    const incoming =
+        getTableData(
+            "incomingTable"
+        );
+
+
+    const expenses =
+        getTableData(
+            "expenseTable"
+        );
+
+
+    const totalIncoming =
+        incoming.reduce(
+            (sum, item) =>
+                sum + item.amount,
+            0
+        );
+
+
+    const totalExpenses =
+        expenses.reduce(
+            (sum, item) =>
+                sum + item.amount,
+            0
+        );
+
+
+    const closing =
+        opening +
+        totalIncoming -
+        totalExpenses;
+
+
+    /*
+       Portrait canvas
+    */
+
+    const width =
+        1080;
+
+
+    const maxRows =
+        Math.max(
+            incoming.length,
+            expenses.length
+        );
+
+
+    const height =
+        2050 +
+        maxRows * 45;
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        width;
+
+
+    canvas.height =
+        height;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /*
+       Background
+    */
+
+    ctx.fillStyle =
+        "#f3f6fa";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /*
+       Header
+    */
+
+    ctx.fillStyle =
+        "#2563eb";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        180
+    );
+
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    /*
+       Fixed title
+    */
+
+    ctx.font =
+        "bold 38px Arial";
+
+
+    ctx.fillText(
+        "Monthly Financial Report",
+        width / 2,
+        58
+    );
+
+
+    /*
+       Editable report name
+    */
+
+    ctx.font =
+        "bold 24px Arial";
+
+
+    ctx.fillText(
+        reportName,
+        width / 2,
+        100
+    );
+
+
+    /*
+       Month
+    */
+
+    ctx.font =
+        "18px Arial";
+
+
+    ctx.fillText(
+        getFormattedMonth(),
+        width / 2,
+        138
+    );
+
+
+    let y =
+        220;
+
+
+    /*
+       Summary cards
+    */
+
+    const cardGap =
+        20;
+
+
+    const cardWidth =
+        (
+            width -
+            80 -
+            cardGap
+        ) / 2;
+
+
+    const cardHeight =
+        105;
+
+
+    /*
+       Opening
+    */
+
+    drawCanvasSummaryCard(
+        ctx,
+        40,
+        y,
+        cardWidth,
+        cardHeight,
+        "Opening Balance",
+        opening,
+        "#2563eb"
+    );
+
+
+    /*
+       Incoming
+    */
+
+    drawCanvasSummaryCard(
+        ctx,
+        40 +
+        cardWidth +
+        cardGap,
+        y,
+        cardWidth,
+        cardHeight,
+        "Total Incoming",
+        totalIncoming,
+        "#059669"
+    );
+
+
+    y +=
+        cardHeight +
+        20;
+
+
+    /*
+       Expenses
+    */
+
+    drawCanvasSummaryCard(
+        ctx,
+        40,
+        y,
+        cardWidth,
+        cardHeight,
+        "Total Expenses",
+        totalExpenses,
+        "#dc2626"
+    );
+
+
+    /*
+       Closing
+    */
+
+    drawCanvasSummaryCard(
+        ctx,
+        40 +
+        cardWidth +
+        cardGap,
+        y,
+        cardWidth,
+        cardHeight,
+        "Closing Balance on Last Date of Month",
+        closing,
+        "#7c3aed"
+    );
+
+
+    y +=
+        cardHeight +
+        70;
+
+
+    /*
+       Incoming Distribution
+    */
+
+    y =
+        drawCanvasPie(
+            ctx,
+            incoming,
+            totalIncoming,
+            "INCOMING DISTRIBUTION",
+            y,
+            width
+        );
+
+
+    y +=
+        60;
+
+
+    /*
+       Expense Distribution
+    */
+
+    y =
+        drawCanvasPie(
+            ctx,
+            expenses,
+            totalExpenses,
+            "EXPENSE DISTRIBUTION",
+            y,
+            width
+        );
+
+
+    y +=
+        60;
+
+
+    /*
+       Footer
+    */
+
+    ctx.fillStyle =
+        "#9ca3af";
+
+
+    ctx.font =
+        "14px Arial";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.fillText(
+        "Monthly Financial Report",
+        width / 2,
+        height - 35
+    );
+
+
+    /*
+       Filename
+    */
+
+    const safeName =
+        reportName
+
+            .replace(
+                /[^a-z0-9]/gi,
+                "-"
+            )
+
+            .replace(
+                /-+/g,
+                "-"
+            );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.download =
+        `${safeName}-${month}-Portrait.jpeg`;
+
+
+    link.href =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.95
+        );
+
+
+    link.click();
+
+}
+
+
+/* =====================================================
+   CANVAS SUMMARY CARD
+===================================================== */
+
+function drawCanvasSummaryCard(
+    ctx,
+    x,
+    y,
+    width,
+    height,
+    title,
+    value,
+    background
 ) {
 
-const left = 100;
+    /*
+       Card background
+    */
 
-let y = startY;
-
-
-data.forEach(
-(item,index) => {
-
-const percentage =
-total > 0
-?
-item.amount /
-total *
-100
-:
-0;
+    ctx.fillStyle =
+        background;
 
 
-/* Color */
-
-ctx.fillStyle =
-colors[
-index %
-colors.length
-];
-
-ctx.fillRect(
-left,
-y-14,
-16,
-16
-);
+    ctx.fillRect(
+        x,
+        y,
+        width,
+        height
+    );
 
 
-/* Name */
+    /*
+       Decorative circle
+    */
 
-ctx.textAlign =
-"left";
-
-ctx.fillStyle =
-"#374151";
-
-ctx.font =
-"16px Arial";
-
-ctx.fillText(
-item.name,
-left+28,
-y
-);
+    ctx.beginPath();
 
 
-/* Amount */
-
-ctx.textAlign =
-"right";
-
-ctx.font =
-"bold 16px Arial";
-
-ctx.fillText(
-formatCurrency(
-item.amount
-) +
-" (" +
-percentage.toFixed(1) +
-"%)",
-980,
-y
-);
+    ctx.arc(
+        x + width - 15,
+        y + 5,
+        60,
+        0,
+        Math.PI * 2
+    );
 
 
-y += 32;
+    ctx.fillStyle =
+        "rgba(255,255,255,0.12)";
+
+
+    ctx.fill();
+
+
+    /*
+       Title
+    */
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.textAlign =
+        "left";
+
+
+    ctx.font =
+        "bold 17px Arial";
+
+
+    ctx.fillText(
+        title,
+        x + 18,
+        y + 32
+    );
+
+
+    /*
+       Amount
+    */
+
+    ctx.font =
+        "bold 27px Arial";
+
+
+    ctx.fillText(
+        formatCurrency(
+            value
+        ),
+        x + 18,
+        y + 73
+    );
 
 }
-);
-
-}
 
 
-/* =========================================================
-   CANVAS PIE
-========================================================= */
+/* =====================================================
+   CANVAS PIE CHART
+===================================================== */
 
 function drawCanvasPie(
-ctx,
-centerX,
-centerY,
-radius,
-data,
-colors,
-total
+    ctx,
+    data,
+    total,
+    title,
+    y,
+    width
 ) {
 
-if(total <= 0) {
+    /*
+       Title
+    */
 
-ctx.beginPath();
+    ctx.fillStyle =
+        "#111827";
 
-ctx.arc(
-centerX,
-centerY,
-radius,
-0,
-Math.PI*2
-);
 
-ctx.fillStyle =
-"#e5e7eb";
+    ctx.textAlign =
+        "center";
 
-ctx.fill();
 
-return;
+    ctx.font =
+        "bold 27px Arial";
+
+
+    ctx.fillText(
+        title,
+        width / 2,
+        y
+    );
+
+
+    y +=
+        40;
+
+
+    const centerX =
+        width / 2;
+
+
+    const centerY =
+        y + 175;
+
+
+    const radius =
+        145;
+
+
+    const colors = [
+
+        "#2563eb",
+
+        "#16a34a",
+
+        "#f59e0b",
+
+        "#dc2626",
+
+        "#7c3aed",
+
+        "#0891b2",
+
+        "#db2777",
+
+        "#65a30d",
+
+        "#ea580c",
+
+        "#4f46e5"
+
+    ];
+
+
+    let startAngle =
+        -Math.PI / 2;
+
+
+    /*
+       Draw slices
+    */
+
+    data.forEach(
+        (item, index) => {
+
+            const slice =
+                total > 0
+
+                    ? item.amount /
+                      total *
+                      Math.PI *
+                      2
+
+                    : 0;
+
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                centerX,
+                centerY
+            );
+
+
+            ctx.arc(
+                centerX,
+                centerY,
+                radius,
+                startAngle,
+                startAngle +
+                slice
+            );
+
+
+            ctx.closePath();
+
+
+            ctx.fillStyle =
+                colors[
+                    index %
+                    colors.length
+                ];
+
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#ffffff";
+
+
+            ctx.lineWidth =
+                3;
+
+
+            ctx.stroke();
+
+
+            startAngle +=
+                slice;
+
+        }
+    );
+
+
+    /*
+       Donut center
+    */
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        centerX,
+        centerY,
+        65,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#111827";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.font =
+        "bold 20px Arial";
+
+
+    ctx.fillText(
+        formatCurrency(
+            total
+        ),
+        centerX,
+        centerY + 7
+    );
+
+
+    y =
+        centerY +
+        radius +
+        55;
+
+
+    /*
+       Legend
+    */
+
+    data.forEach(
+        (item, index) => {
+
+            const percentage =
+                total > 0
+
+                    ? item.amount /
+                      total *
+                      100
+
+                    : 0;
+
+
+            /*
+               Color box
+            */
+
+            ctx.fillStyle =
+                colors[
+                    index %
+                    colors.length
+                ];
+
+
+            ctx.fillRect(
+                70,
+                y - 15,
+                18,
+                18
+            );
+
+
+            /*
+               Category
+            */
+
+            ctx.fillStyle =
+                "#374151";
+
+
+            ctx.textAlign =
+                "left";
+
+
+            ctx.font =
+                "16px Arial";
+
+
+            ctx.fillText(
+                item.name,
+                105,
+                y
+            );
+
+
+            /*
+               Amount and percentage
+            */
+
+            ctx.textAlign =
+                "right";
+
+
+            ctx.fillText(
+
+                formatCurrency(
+                    item.amount
+                ) +
+
+                " (" +
+
+                percentage.toFixed(
+                    1
+                ) +
+
+                "%)",
+
+                width - 70,
+
+                y
+
+            );
+
+
+            y +=
+                34;
+
+        }
+    );
+
+
+    return y;
 
 }
 
 
-let startAngle =
--Math.PI/2;
-
-
-data.forEach(
-(item,index) => {
-
-const sliceAngle =
-item.amount /
-total *
-Math.PI*2;
-
-
-ctx.beginPath();
-
-ctx.moveTo(
-centerX,
-centerY
-);
-
-ctx.arc(
-centerX,
-centerY,
-radius,
-startAngle,
-startAngle +
-sliceAngle
-);
-
-ctx.closePath();
-
-ctx.fillStyle =
-colors[
-index %
-colors.length
-];
-
-ctx.fill();
-
-startAngle +=
-sliceAngle;
-
-}
-);
-
-
-/* Donut center */
-
-ctx.beginPath();
-
-ctx.arc(
-centerX,
-centerY,
-radius*.48,
-0,
-Math.PI*2
-);
-
-ctx.fillStyle =
-"#ffffff";
-
-ctx.fill();
-
-}
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
+/* =====================================================
+   INITIALIZATION
+===================================================== */
 
 document.addEventListener(
-"DOMContentLoaded",
-function() {
+    "DOMContentLoaded",
+    function() {
 
-const monthInput =
-document.getElementById(
-"reportMonth"
-);
+        const now =
+            new Date();
 
 
-const now =
-new Date();
+        const month =
+            now.getFullYear() +
+            "-" +
+            String(
+                now.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
 
 
-const month =
-now.getFullYear() +
-"-" +
-String(
-now.getMonth()+1
-).padStart(
-2,
-"0"
-);
+        /*
+           Set current month
+        */
+
+        document.getElementById(
+            "reportMonth"
+        ).value =
+            month;
 
 
-monthInput.value =
-month;
+        /*
+           All amounts already start at ZERO
+        */
+
+        document.getElementById(
+            "openingBalance"
+        ).value =
+            0;
 
 
-calculateReport();
+        document.querySelectorAll(
+            ".amount-input"
+        ).forEach(
+            input => {
+                input.value = 0;
+            }
+        );
 
-}
+
+        calculateReport();
+
+    }
 );
 
 </script>
 
 </body>
 </html>
-```
