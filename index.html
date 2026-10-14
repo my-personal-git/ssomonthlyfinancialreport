@@ -918,7 +918,7 @@ td input {
 }
 .cash-breakup-form {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.5fr 1fr 1fr auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
     gap: 12px;
     align-items: end;
     margin-bottom: 18px;
@@ -1773,17 +1773,63 @@ td input {
 
 </div>
 
+
+
+
+
+
 <!-- CASH TRANSACTION BREAKUP -->
 <section class="cash-breakup" id="cashBreakupSection">
     <div class="section-header">
         <h2>Cash Transaction Breakup</h2>
     </div>
+    <p style="color:#6b7280;margin-top:-5px;">
+        Record individual cash received and cash spent, with a reason for every transaction.
+    </p>
 
     <div class="cash-breakup-form">
         <div class="form-group">
             <label for="cashCarryForward">Carry Forward from Previous Month (₹)</label>
             <input type="number" id="cashCarryForward" min="0" step="0.01" value="0" oninput="renderCashTransactions()" placeholder="0.00">
         </div>
+        <div class="form-group">
+            <label for="cashWithdrawal">Cash Withdrawal (₹)</label>
+            <input type="number" id="cashWithdrawal" min="0" step="0.01" value="0" oninput="renderCashTransactions()" placeholder="0.00">
+        </div>
+    </div>
+
+    <div class="cash-breakup-totals">
+        <div class="cash-total-card">
+            <span>Carry Forward from Previous Month</span>
+            <strong id="cashCarryForwardDisplay">₹0</strong>
+        </div>
+        <div class="cash-total-card">
+            <span>Cash Withdrawal</span>
+            <strong id="cashWithdrawalDisplay">₹0</strong>
+        </div>
+        <div class="cash-total-card closing-cash-card">
+            <span>Opening Cash Balance (Carry Forward + Withdrawal)</span>
+            <strong id="cashOpeningBalanceDisplay">₹0</strong>
+        </div>
+        <div class="cash-total-card in">
+            <span>Total Cash Incoming</span>
+            <strong id="cashTotalIncoming">₹0</strong>
+        </div>
+        <div class="cash-total-card out">
+            <span>Total Cash Expenses</span>
+            <strong id="cashTotalExpenses">₹0</strong>
+        </div>
+        <div class="cash-total-card">
+            <span>Net Cash Movement</span>
+            <strong id="cashNetMovement">₹0</strong>
+        </div>
+        <div class="cash-total-card closing-cash-card">
+            <span>Cash Remaining on Last Date of Month</span>
+            <strong id="cashClosingBalance">₹0</strong>
+        </div>
+    </div>
+
+    <div class="cash-breakup-form cash-transaction-entry-form">
         <div class="form-group">
             <label for="cashTransactionDate">Transaction Date</label>
             <input type="date" id="cashTransactionDate">
@@ -1806,29 +1852,6 @@ td input {
         <button type="button" class="add-btn" onclick="addCashTransaction()">+ Add Transaction</button>
     </div>
 
-    <div class="cash-breakup-totals">
-        <div class="cash-total-card">
-            <span>Carry Forward from Previous Month</span>
-            <strong id="cashCarryForwardDisplay">₹0</strong>
-        </div>
-        <div class="cash-total-card in">
-            <span>Total Cash Incoming</span>
-            <strong id="cashTotalIncoming">₹0</strong>
-        </div>
-        <div class="cash-total-card out">
-            <span>Total Cash Expenses</span>
-            <strong id="cashTotalExpenses">₹0</strong>
-        </div>
-        <div class="cash-total-card">
-            <span>Net Cash Movement</span>
-            <strong id="cashNetMovement">₹0</strong>
-        </div>
-        <div class="cash-total-card closing-cash-card">
-            <span>Cash Remaining on Last Date of Month</span>
-            <strong id="cashClosingBalance">₹0</strong>
-        </div>
-    </div>
-
     <div class="table-wrapper">
         <table class="cash-breakup-table">
             <thead>
@@ -1838,8 +1861,8 @@ td input {
         </table>
         <div class="cash-empty" id="cashTransactionEmpty">No cash transactions added yet.</div>
     </div>
-</section>
 
+</section>
 <!-- =====================================================
      EXPORT
 ===================================================== -->
@@ -1882,7 +1905,6 @@ td input {
     </div>
 
 </div>
-
 <div class="footer">
 
     @Sonesta Silver Oak, All Right Reserved
@@ -3081,7 +3103,7 @@ async function saveFullJPEG() {
         y,
         cardWidth,
         cardHeight,
-        "Closing Balance",
+        "Closing Balance on Last Date of Month",
         closing,
         "#7c3aed"
     );
@@ -3211,9 +3233,11 @@ function drawCanvasCashBreakup(ctx, y, width) {
     const left = 40;
     const cardWidth = width - 80;
     const carryForward = Number(document.getElementById("cashCarryForward")?.value) || 0;
+    const withdrawal = Number(document.getElementById("cashWithdrawal")?.value) || 0;
+    const openingCash = carryForward + withdrawal;
     const incoming = cashTransactions.filter(t => t.type === "incoming").reduce((sum, t) => sum + t.amount, 0);
     const expenses = cashTransactions.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
-    const closing = carryForward + incoming - expenses;
+    const closing = openingCash + incoming - expenses;
     const rows = cashTransactions.length;
     const rowHeight = 38;
     const headerHeight = 42;
@@ -3229,14 +3253,16 @@ function drawCanvasCashBreakup(ctx, y, width) {
     ctx.fillText("CASH TRANSACTION BREAKUP", left + 22, y + 38);
 
     const summaryY = y + 56;
-    const gap = 12;
-    const boxW = (cardWidth - 44 - gap * 3) / 4;
+    const gap = 10;
     const summaries = [
         ["Carry Forward", carryForward, "#2563eb"],
+        ["Cash Withdrawal", withdrawal, "#0891b2"],
+        ["Opening Cash Balance", openingCash, "#4338ca"],
         ["Cash Incoming", incoming, "#059669"],
         ["Cash Expenses", expenses, "#dc2626"],
         ["Cash Remaining", closing, "#4338ca"]
     ];
+    const boxW = (cardWidth - 44 - gap * (summaries.length - 1)) / summaries.length;
     summaries.forEach((item, i) => {
         const x = left + 22 + i * (boxW + gap);
         ctx.fillStyle = "#f3f4f6";
@@ -4998,9 +5024,13 @@ function renderCashTransactions() {
     document.getElementById("cashTotalExpenses").textContent = formatCurrency(expenses);
 
     const carryForward = Number(document.getElementById("cashCarryForward")?.value) || 0;
+    const withdrawal = Number(document.getElementById("cashWithdrawal")?.value) || 0;
+    const openingCash = carryForward + withdrawal;
     const net = incoming - expenses;
-    const closing = carryForward + net;
+    const closing = openingCash + net;
     document.getElementById("cashCarryForwardDisplay").textContent = formatCurrency(carryForward);
+    document.getElementById("cashWithdrawalDisplay").textContent = formatCurrency(withdrawal);
+    document.getElementById("cashOpeningBalanceDisplay").textContent = formatCurrency(openingCash);
     const netElement = document.getElementById("cashNetMovement");
     netElement.textContent = formatCurrency(net);
     netElement.style.color = net < 0 ? "#b91c1c" : net > 0 ? "#047857" : "#1f2937";
